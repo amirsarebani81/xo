@@ -3,7 +3,7 @@ from square_status import SquareStatus
 
 class Board:
     def __init__(self):
-        self.__board = [[SquareStatus.EMPTY for i in range(3)] for j in range(3)]
+        self.__board = [[SquareStatus.EMPTY for _ in range(3)] for _ in range(3)]
 
     @staticmethod
     def __get_square_symbol(square_status):
@@ -25,3 +25,18 @@ class Board:
             for j in range(3):
                 print(f"{self.__get_square_symbol(self.__board[i][j])}", end=" ")
             print(f"")
+
+    def get_row(self, row):
+        return self.__board[row - 1]
+
+    def get_column(self, column):
+        column = [self.__board[0][column - 1], self.__board[1][column - 1], self.__board[2][column - 1]]
+        return column
+
+    def get_right_to_left_diagonal(self):
+        diagonal = [self.__board[0][2], self.__board[1][1], self.__board[2][0]]
+        return diagonal
+
+    def get_left_to_right_diagonal(self):
+        diagonal = [self.__board[0][0], self.__board[1][1], self.__board[2][2]]
+        return diagonal
