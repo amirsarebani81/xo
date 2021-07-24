@@ -8,7 +8,7 @@ class Board:
     @staticmethod
     def __get_square_symbol(square_status):
         if square_status == SquareStatus.EMPTY:
-            return '0'
+            return '-'
         elif square_status == SquareStatus.COMPUTER:
             return 'c'
         else:
@@ -21,10 +21,12 @@ class Board:
         return self.__board[row - 1][column - 1]
 
     def print_ground(self):
+        print('_________________________________________')
         for i in range(3):
             for j in range(3):
-                print(f"{self.__get_square_symbol(self.__board[i][j])}", end=" ")
-            print(f"")
+                print(self.__get_square_symbol(self.__board[i][j]), end=" ")
+            print("")
+        print('_________________________________________')
 
     def get_row(self, row):
         return self.__board[row - 1]
@@ -40,3 +42,10 @@ class Board:
     def get_left_to_right_diagonal(self):
         diagonal = [self.__board[0][0], self.__board[1][1], self.__board[2][2]]
         return diagonal
+
+    def is_board_full(self):
+        for i in range(3):
+            for j in range(3):
+                if self.__board[i][j] == SquareStatus.EMPTY:
+                    return False
+        return True

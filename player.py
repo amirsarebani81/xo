@@ -10,7 +10,7 @@ class Player:
         return square == SquareStatus.EMPTY
 
     def select_square(self):
-        row, column = int(input()), int(input())
+        row, column = int(input("Enter row: ")), int(input("Enter column: "))
         if self.is_selecting_possible(self.__board.get_square(row, column)):
             self.mark_square(row, column)
         else:
