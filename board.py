@@ -20,7 +20,7 @@ class Board:
     def get_square(self, row, column):
         return self.__board[row - 1][column - 1]
 
-    def print_ground(self):
+    def print_board(self):
         print('_________________________________________')
         for i in range(3):
             for j in range(3):
@@ -49,3 +49,9 @@ class Board:
                 if self.__board[i][j] == SquareStatus.EMPTY:
                     return False
         return True
+
+    def print_this(self):
+        for i in range(3):
+            for j in range(3):
+                print(self.__board[i][j], end=" ")
+            print()

@@ -1,13 +1,25 @@
 from board import Board
+import tkinter as tk
 from computer import Computer
 from player import Player
 from square_status import SquareStatus
 from game_status import GameStatus
 from random import Random
+import sys
 
 
 class Game:
     def __init__(self):
+        self.window = tk.Tk()
+        self.button9 = tk.Button(master=self.window, text="9", width=2, height=2, command=self.press_9)
+        self.button8 = tk.Button(master=self.window, text="8", width=2, height=2, command=self.press_8)
+        self.button7 = tk.Button(master=self.window, text="7", width=2, height=2, command=self.press_7)
+        self.button6 = tk.Button(master=self.window, text="6", width=2, height=2, command=self.press_6)
+        self.button5 = tk.Button(master=self.window, text="5", width=2, height=2, command=self.press_5)
+        self.button4 = tk.Button(master=self.window, text="4", width=2, height=2, command=self.press_4)
+        self.button3 = tk.Button(master=self.window, text="3", width=2, height=2, command=self.press_3)
+        self.button2 = tk.Button(master=self.window, text="2", width=2, height=2, command=self.press_2)
+        self.button1 = tk.Button(master=self.window, text="1", width=2, height=2, command=self.press_1)
         self.__board = Board()
         self.__computer = Computer(self.__board)
         self.__player = Player(self.__board)
@@ -39,27 +51,74 @@ class Game:
         if self.__board.is_board_full():
             self.__game_status = GameStatus.TIE
 
+    def do_step(self, row, column):
+        self.__player.mark_square(row, column)
+        self.__board.print_board()
+        self.__check_game_status()
+
+        if self.__game_status != GameStatus.CONTINUE:
+            self.__print_result()
+            sys.exit(0)
+
+        self.__computer.select_square()
+        self.__board.print_board()
+        self.__check_game_status()
+
+        if self.__game_status != GameStatus.CONTINUE:
+            self.__print_result()
+            sys.exit(0)
+
+    def press_1(self):
+        self.do_step(1, 1)
+        self.button1.destroy()
+
+    def press_2(self):
+        self.do_step(1, 2)
+        self.button2.destroy()
+
+    def press_3(self):
+        self.do_step(1, 3)
+        self.button3.destroy()
+
+    def press_4(self):
+        self.do_step(2, 1)
+        self.button4.destroy()
+
+    def press_5(self):
+        self.do_step(2, 2)
+        self.button5.destroy()
+
+    def press_6(self):
+        self.do_step(2, 3)
+        self.button6.destroy()
+
+    def press_7(self):
+        self.do_step(3, 1)
+        self.button7.destroy()
+
+    def press_8(self):
+        self.do_step(3, 2)
+        self.button8.destroy()
+
+    def press_9(self):
+        self.do_step(3, 3)
+        self.button9.destroy()
+
     def run(self):
         if Random().randint(0, 1) == 0:
-            first_turn = Player(self.__board)
-            second_turn = Computer(self.__board)
-        else:
-            first_turn = Computer(self.__board)
-            second_turn = Player(self.__board)
+            self.__computer.select_square()
 
-        while self.__game_status == GameStatus.CONTINUE:
-            first_turn.select_square()
-            self.__board.print_ground()
-            self.__check_game_status()
+        self.button1.place(x=0, y=0)
+        self.button2.place(x=50, y=0)
+        self.button3.place(x=100, y=0)
+        self.button4.place(x=0, y=50)
+        self.button5.place(x=50, y=50)
+        self.button6.place(x=100, y=50)
+        self.button7.place(x=0, y=100)
+        self.button8.place(x=50, y=100)
+        self.button9.place(x=100, y=100)
 
-            if self.__game_status != GameStatus.CONTINUE:
-                break
-
-            second_turn.select_square()
-            self.__board.print_ground()
-            self.__check_game_status()
-
-        self.__print_result()
+        self.window.mainloop()
 
     def __print_result(self):
         print('*****************************************')
@@ -72,8 +131,8 @@ class Game:
 
     @staticmethod
     def __check_squares_match(square1, square2, square3):
-        if square1 == square2 == square3 == SquareStatus.COMPUTER:
+        if square1 == square2 and square1 == square3 and square1 == SquareStatus.COMPUTER:
             return GameStatus.COMPUTER_WIN
-        if square1 == square2 == square3 == SquareStatus.PLAYER:
+        if square1 == square2 and square1 == square3 and square1 == SquareStatus.PLAYER:
             return GameStatus.PLAYER_WIN
         return GameStatus.CONTINUE
