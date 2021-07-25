@@ -17,14 +17,14 @@ class Game:
         for row in range(1, 4):
             squares = self.__board.get_row(row)
             self.__game_status = self.__check_squares_match(squares[0], squares[1], squares[2])
-        if self.__game_status != GameStatus.CONTINUE:
-            return
+            if self.__game_status != GameStatus.CONTINUE:
+                return
 
         for column in range(1, 4):
             squares = self.__board.get_column(column)
             self.__game_status = self.__check_squares_match(squares[0], squares[1], squares[2])
-        if self.__game_status != GameStatus.CONTINUE:
-            return
+            if self.__game_status != GameStatus.CONTINUE:
+                return
 
         squares = self.__board.get_left_to_right_diagonal()
         self.__game_status = self.__check_squares_match(squares[0], squares[1], squares[2])
