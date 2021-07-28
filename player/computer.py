@@ -1,6 +1,6 @@
-from square_status import SquareStatus
+from constants.square_status import SquareStatus
 from random import Random
-from player import Player
+from player.player import Player
 
 
 class Computer(Player):

@@ -1,4 +1,4 @@
-from square_status import SquareStatus
+from constants.square_status import SquareStatus
 
 
 class Board:
