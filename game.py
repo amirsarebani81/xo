@@ -73,16 +73,18 @@ class Game:
         self.__check_game_status()
 
         if self.__game_status != GameStatus.CONTINUE:
+            self.__clean_window()
             self.__print_result()
-            sys.exit(0)
+            self.window.mainloop()
 
         self.__computer.select_square()
         self.__board.print_board()
         self.__check_game_status()
 
         if self.__game_status != GameStatus.CONTINUE:
+            self.__clean_window()
             self.__print_result()
-            sys.exit(0)
+            self.window.mainloop()
 
     def __press_1(self):
         self.__do_selects(1, 1)
@@ -140,24 +142,7 @@ class Game:
         self.window.mainloop()
 
     def __delete_button(self, button_id):
-        if button_id == 1:
-            self.buttons[0].destroy()
-        if button_id == 2:
-            self.buttons[1].destroy()
-        if button_id == 3:
-            self.buttons[2].destroy()
-        if button_id == 4:
-            self.buttons[3].destroy()
-        if button_id == 5:
-            self.buttons[4].destroy()
-        if button_id == 6:
-            self.buttons[5].destroy()
-        if button_id == 7:
-            self.buttons[6].destroy()
-        if button_id == 8:
-            self.buttons[7].destroy()
-        if button_id == 9:
-            self.buttons[8].destroy()
+        self.buttons[button_id - 1].destroy()
 
     def run(self):
         if Random().randint(0, 1) == 0:
@@ -166,18 +151,24 @@ class Game:
         self.__update_gui()
         self.window.mainloop()
 
-    def __update_status(self):
-        print("updated")
-        self.window.update()
+    def __clean_window(self):
+        for label in self.labels:
+            label.destroy()
+
+        for button in self.buttons:
+            button.destroy()
 
     def __print_result(self):
-        print('*****************************************')
+        label = tk.Label()
+        if self.__game_status == GameStatus.PLAYER_WIN:
+            label.config(text="player win")
+        if self.__game_status == GameStatus.COMPUTER_WIN:
+            label.config(text="computer win")
         if self.__game_status == GameStatus.TIE:
-            print("tie!")
-        elif self.__game_status == GameStatus.PLAYER_WIN:
-            print("player win!")
-        elif self.__game_status == GameStatus.COMPUTER_WIN:
-            print("computer win!")
+            label.config(text="tie")
+
+        label.place(x=0, y=0)
+        self.labels.append(label)
 
     @staticmethod
     def __check_squares_match(square1, square2, square3):
