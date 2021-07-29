@@ -6,9 +6,15 @@ from player.player import Player
 
 
 class Computer(Player):
-    def __init__(self, board, game_level):
+    def __init__(self, board):
         super().__init__(board)
+        self.__game_level = GameLevel.MEDIUM
+
+    def set_game_level(self, game_level):
         self.__game_level = game_level
+
+    def get_game_level(self):
+        return self.__game_level
 
     def mark_square(self, row, column):
         super().get_board().set_square(row, column, SquareStatus.COMPUTER)
