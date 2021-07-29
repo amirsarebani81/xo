@@ -5,16 +5,15 @@ from player.player import Player
 from constants.square_status import SquareStatus
 from constants.game_status import GameStatus
 from random import Random
-import sys
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, game_level):
         self.window = tk.Tk()
         self.labels = list()
         self.buttons = list()
         self.__board = Board()
-        self.__computer = Computer(self.__board)
+        self.__computer = Computer(self.__board, game_level)
         self.__player = Player(self.__board)
         self.__game_status = GameStatus.CONTINUE
 
