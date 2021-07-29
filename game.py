@@ -1,4 +1,5 @@
 from tkinter.constants import ANCHOR, CENTER
+from tkinter.font import Font
 from board.board import Board
 import tkinter as tk
 from player.computer import Computer
@@ -11,14 +12,14 @@ from random import Random
 class Game:
     def __init__(self, game_level):
         self.__init_window()
+        self.__init_buttons()
         self.labels = list()
-        self.buttons = list()
         self.__board = Board()
         self.__computer = Computer(self.__board, game_level)
         self.__player = Player(self.__board)
         self.__game_status = GameStatus.CONTINUE
 
-        self.__init_buttons()
+        self.__init_images()
 
     def __init_window(self):
         self.window = tk.Tk()
@@ -29,6 +30,7 @@ class Game:
         self.window.maxsize(width=400, height=400)
 
     def __init_buttons(self):
+        self.buttons = list()
         self.buttons.append(tk.Button(master=self.window, text=1, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_1))
         self.buttons.append(tk.Button(master=self.window, text=2, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_2))
         self.buttons.append(tk.Button(master=self.window, text=3, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_3))
@@ -48,6 +50,22 @@ class Game:
         self.buttons[6].place(relx=0.25, rely=0.75, anchor=CENTER)
         self.buttons[7].place(relx=0.5, rely=0.75, anchor=CENTER)
         self.buttons[8].place(relx=0.75, rely=0.75, anchor=CENTER)
+
+    def __init_images(self):
+        self.images = dict()
+        self.images['cross'] = tk.PhotoImage(file="images/cross.png")
+        self.images['circle'] = tk.PhotoImage(file="images/circle.png")
+        self.images['win'] = tk.PhotoImage(file="images/win.png")
+        self.images['lose'] = tk.PhotoImage(file="images/lose.png")
+        self.images['tie'] = tk.PhotoImage(file="images/tie.png")
+        self.images['restart'] = tk.PhotoImage(file="images/restart.png")
+
+        self.images['cross'] = self.images['cross'].subsample(30)
+        self.images['circle'] = self.images['circle'].subsample(18)
+        self.images['win'] = self.images['win'].subsample(5)
+        self.images['lose'] = self.images['lose'].subsample(5)
+        self.images['tie'] = self.images['tie'].subsample(2)
+        self.images['restart'] = self.images['restart'].subsample(15)
 
     def __check_game_status(self):
         for row in range(1, 4):
@@ -133,21 +151,16 @@ class Game:
         self.__update_gui()
 
     def __update_gui(self):
-        cross = tk.PhotoImage(file="images/cross.png")
-        circle = tk.PhotoImage(file="images/circle.png")
-        cross = cross.subsample(30)
-        circle = circle.subsample(18)
-
         for row in range(1, 4):
             for column in range(1, 4):
                 if self.__board.get_square(row, column) != SquareStatus.EMPTY:
                     self.__delete_button((row - 1) * 3 + column)
                     if self.__board.get_square(row, column) == SquareStatus.COMPUTER:
-                        label = tk.Label(master=self.window, image=cross, background="#272927")
+                        label = tk.Label(master=self.window, image=self.images['cross'], background="#272927")
                         label.place(relx=column*0.25, rely=row*0.25, anchor=CENTER)
                         self.labels.append(label)
                     else:
-                        label = tk.Label(master=self.window, image=circle, background="#272927")
+                        label = tk.Label(master=self.window, image=self.images['circle'], background="#272927")
                         label.place(relx=column*0.25, rely=row*0.25, anchor=CENTER)
                         self.labels.append(label)
         self.window.mainloop()
@@ -172,20 +185,22 @@ class Game:
         self.buttons.clear()
 
     def __print_result(self):
-        label = tk.Label()
+        label = tk.Label(master=self.window, background="#272927")
         if self.__game_status == GameStatus.PLAYER_WIN:
-            label.config(text="player win")
+            label.config(image=self.images['win'])
         if self.__game_status == GameStatus.COMPUTER_WIN:
-            label.config(text="computer win")
+            label.config(image=self.images['lose'])
         if self.__game_status == GameStatus.TIE:
-            label.config(text="tie")
+            label.config(image=self.images['tie'])
 
-        label.place(x=0, y=0)
+        label.place(relx=0.5, rely=0.5, anchor=CENTER)
         self.labels.append(label)
 
     def __init_restart_button(self):
-        restart_button = tk.Button(text="restart", command=self.restart)
-        restart_button.place(x=100, y=100)
+        font = Font(size=30)
+        restart_button = tk.Button(master=self.window, image=self.images['restart'], width=0, height=0, background="#272927", foreground="#f5d442", highlightthickness=0, bd=0, command=self.restart)
+        restart_button['font'] = font
+        restart_button.place(relx=0.5, rely=0.9, anchor=CENTER)
         self.buttons.append(restart_button)
 
     @staticmethod
