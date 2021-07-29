@@ -55,3 +55,8 @@ class Board:
             for j in range(3):
                 print(self.__board[i][j], end=" ")
             print()
+
+    def clean_board(self):
+        for i in range(3):
+            for j in range(3):
+                self.__board[i][j] = SquareStatus.EMPTY

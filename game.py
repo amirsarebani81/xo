@@ -74,6 +74,7 @@ class Game:
         if self.__game_status != GameStatus.CONTINUE:
             self.__clean_window()
             self.__print_result()
+            self.__init_restart_button()
             self.window.mainloop()
 
         self.__computer.select_square()
@@ -83,6 +84,7 @@ class Game:
         if self.__game_status != GameStatus.CONTINUE:
             self.__clean_window()
             self.__print_result()
+            self.__init_restart_button()
             self.window.mainloop()
 
     def __press_1(self):
@@ -153,9 +155,11 @@ class Game:
     def __clean_window(self):
         for label in self.labels:
             label.destroy()
+        self.labels.clear()
 
         for button in self.buttons:
             button.destroy()
+        self.buttons.clear()
 
     def __print_result(self):
         label = tk.Label()
@@ -169,6 +173,11 @@ class Game:
         label.place(x=0, y=0)
         self.labels.append(label)
 
+    def __init_restart_button(self):
+        restart_button = tk.Button(text="restart", command=self.restart)
+        restart_button.place(x=100, y=100)
+        self.buttons.append(restart_button)
+
     @staticmethod
     def __check_squares_match(square1, square2, square3):
         if square1 == square2 and square1 == square3 and square1 == SquareStatus.COMPUTER:
@@ -176,3 +185,9 @@ class Game:
         if square1 == square2 and square1 == square3 and square1 == SquareStatus.PLAYER:
             return GameStatus.PLAYER_WIN
         return GameStatus.CONTINUE
+
+    def restart(self):
+        self.__board.clean_board()
+        self.__clean_window()
+        self.__init_buttons()
+        self.run()
