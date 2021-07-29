@@ -1,3 +1,4 @@
+from tkinter.constants import ANCHOR, CENTER
 from board.board import Board
 import tkinter as tk
 from player.computer import Computer
@@ -9,7 +10,7 @@ from random import Random
 
 class Game:
     def __init__(self, game_level):
-        self.window = tk.Tk()
+        self.__init_window()
         self.labels = list()
         self.buttons = list()
         self.__board = Board()
@@ -19,26 +20,34 @@ class Game:
 
         self.__init_buttons()
 
-    def __init_buttons(self):
-        self.buttons.append(tk.Button(master=self.window, text=1, width=2, height=2, command=self.__press_1))
-        self.buttons.append(tk.Button(master=self.window, text=2, width=2, height=2, command=self.__press_2))
-        self.buttons.append(tk.Button(master=self.window, text=3, width=2, height=2, command=self.__press_3))
-        self.buttons.append(tk.Button(master=self.window, text=4, width=2, height=2, command=self.__press_4))
-        self.buttons.append(tk.Button(master=self.window, text=5, width=2, height=2, command=self.__press_5))
-        self.buttons.append(tk.Button(master=self.window, text=6, width=2, height=2, command=self.__press_6))
-        self.buttons.append(tk.Button(master=self.window, text=7, width=2, height=2, command=self.__press_7))
-        self.buttons.append(tk.Button(master=self.window, text=8, width=2, height=2, command=self.__press_8))
-        self.buttons.append(tk.Button(master=self.window, text=9, width=2, height=2, command=self.__press_9))
+    def __init_window(self):
+        self.window = tk.Tk()
+        self.window.title("XO")
+        self.window.geometry("400x400")
+        self.window.config(bg="#272927")
+        self.window.minsize(width=400, height=400)
+        self.window.maxsize(width=400, height=400)
 
-        self.buttons[0].place(x=0, y=0)
-        self.buttons[1].place(x=50, y=0)
-        self.buttons[2].place(x=100, y=0)
-        self.buttons[3].place(x=0, y=50)
-        self.buttons[4].place(x=50, y=50)
-        self.buttons[5].place(x=100, y=50)
-        self.buttons[6].place(x=0, y=100)
-        self.buttons[7].place(x=50, y=100)
-        self.buttons[8].place(x=100, y=100)
+    def __init_buttons(self):
+        self.buttons.append(tk.Button(master=self.window, text=1, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_1))
+        self.buttons.append(tk.Button(master=self.window, text=2, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_2))
+        self.buttons.append(tk.Button(master=self.window, text=3, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_3))
+        self.buttons.append(tk.Button(master=self.window, text=4, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_4))
+        self.buttons.append(tk.Button(master=self.window, text=5, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_5))
+        self.buttons.append(tk.Button(master=self.window, text=6, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_6))
+        self.buttons.append(tk.Button(master=self.window, text=7, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_7))
+        self.buttons.append(tk.Button(master=self.window, text=8, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_8))
+        self.buttons.append(tk.Button(master=self.window, text=9, width=5, height=4, background="#272927", highlightthickness=0, bd=0, command=self.__press_9))
+
+        self.buttons[0].place(relx=0.25, rely=0.25, anchor=CENTER)
+        self.buttons[1].place(relx=0.5, rely=0.25, anchor=CENTER)
+        self.buttons[2].place(relx=0.75, rely=0.25, anchor=CENTER)
+        self.buttons[3].place(relx=0.25, rely=0.5, anchor=CENTER)
+        self.buttons[4].place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.buttons[5].place(relx=0.75, rely=0.5, anchor=CENTER)
+        self.buttons[6].place(relx=0.25, rely=0.75, anchor=CENTER)
+        self.buttons[7].place(relx=0.5, rely=0.75, anchor=CENTER)
+        self.buttons[8].place(relx=0.75, rely=0.75, anchor=CENTER)
 
     def __check_game_status(self):
         for row in range(1, 4):
@@ -125,20 +134,21 @@ class Game:
 
     def __update_gui(self):
         cross = tk.PhotoImage(file="images/cross.png")
-        cross = cross.subsample(50)
         circle = tk.PhotoImage(file="images/circle.png")
-        circle = circle.subsample(50)
+        cross = cross.subsample(30)
+        circle = circle.subsample(18)
+
         for row in range(1, 4):
             for column in range(1, 4):
                 if self.__board.get_square(row, column) != SquareStatus.EMPTY:
                     self.__delete_button((row - 1) * 3 + column)
                     if self.__board.get_square(row, column) == SquareStatus.COMPUTER:
-                        label = tk.Label(master=self.window, image=cross)
-                        label.place(x=(column - 1) * 50, y=(row - 1) * 50)
+                        label = tk.Label(master=self.window, image=cross, background="#272927")
+                        label.place(relx=column*0.25, rely=row*0.25, anchor=CENTER)
                         self.labels.append(label)
                     else:
-                        label = tk.Label(master=self.window, image=circle)
-                        label.place(x=(column - 1) * 50, y=(row - 1) * 50)
+                        label = tk.Label(master=self.window, image=circle, background="#272927")
+                        label.place(relx=column*0.25, rely=row*0.25, anchor=CENTER)
                         self.labels.append(label)
         self.window.mainloop()
 
