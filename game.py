@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 from random import Random
 from tkinter.constants import CENTER
@@ -77,6 +78,7 @@ class Game:
         self.images['tie'] = tk.PhotoImage(file="images/tie.png")
         self.images['restart'] = tk.PhotoImage(file="images/restart.png")
         self.images['menu'] = tk.PhotoImage(file="images/menu.png")
+        self.images['exit'] = tk.PhotoImage(file="images/exit.png")
 
         self.images['cross'] = self.images['cross'].subsample(30)
         self.images['circle'] = self.images['circle'].subsample(18)
@@ -85,6 +87,7 @@ class Game:
         self.images['tie'] = self.images['tie'].subsample(2)
         self.images['restart'] = self.images['restart'].subsample(15)
         self.images['menu'] = self.images['menu'].subsample(15)
+        self.images['exit'] = self.images['exit'].subsample(60)
 
     def __check_game_status(self):
         for row in range(1, 4):
@@ -123,6 +126,7 @@ class Game:
             self.__print_result()
             self.__init_restart_button()
             self.__init_menu_button()
+            self.__init_exit_button()
             self.window.mainloop()
 
         self.__computer.select_square()
@@ -134,6 +138,7 @@ class Game:
             self.__print_result()
             self.__init_restart_button()
             self.__init_menu_button()
+            self.__init_exit_button()
             self.window.mainloop()
 
     def __press_1(self):
@@ -276,6 +281,13 @@ class Game:
                                 command=self.__press_menu_button)
         menu_button.place(relx=0.3, rely=0.9, anchor=CENTER)
         self.buttons.append(menu_button)
+
+    def __init_exit_button(self):
+        exit_button = tk.Button(master=self.window, image=self.images['exit'], width=0, height=0,
+                                background="#272927", foreground="#f5d442", highlightthickness=0, bd=0,
+                                command=sys.exit)
+        exit_button.place(relx=0.5, rely=0.9, anchor=CENTER)
+        self.buttons.append(exit_button)
 
     def __press_menu_button(self):
         self.window.destroy()
