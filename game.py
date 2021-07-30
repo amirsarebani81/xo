@@ -20,7 +20,13 @@ class Game:
 
     def __init_window(self):
         self.__window = tk.Tk()
-        self.__window.title(self.__computer.get_game_level())
+        if self.__computer.get_game_level() == GameLevel.EASY:
+            title = "Easy mode"
+        if self.__computer.get_game_level() == GameLevel.MEDIUM:
+            title = "Medium mode"
+        if self.__computer.get_game_level() == GameLevel.HARD:
+            title = "Hard mode"
+        self.__window.title(title)
         self.__window.geometry("400x400")
         self.__window.config(bg="#272927")
         self.__window.minsize(width=400, height=400)
