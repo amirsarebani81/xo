@@ -29,8 +29,8 @@ class Game:
         self.__window.title(title)
         self.__window.geometry("400x400")
         self.__window.config(bg="#272927")
-        self.__window.minsize(width=400, height=400)
-        self.__window.maxsize(width=400, height=400)
+        self.__window.minsize(width=300, height=300)
+        self.__window.maxsize(width=500, height=500)
 
     def __init_buttons(self):
         self.__buttons = list()
@@ -218,7 +218,7 @@ class Game:
         self.__start_menu.title("XO")
         self.__start_menu.geometry("400x400")
         self.__start_menu.config(bg="#272927")
-        self.__start_menu.minsize(width=400, height=400)
+        self.__start_menu.minsize(width=200, height=250)
         self.__start_menu.maxsize(width=400, height=400)
 
         easy = tk.Button(master=self.__start_menu, text="easy", command=self.__start_easy_game)
