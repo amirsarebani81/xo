@@ -19,58 +19,6 @@ class Computer(Player):
     def mark_square(self, row, column):
         super().get_board().set_square(row, column, SquareStatus.COMPUTER)
 
-    def __select_horizontal(self):
-        for row in range(1, 4):
-            squares = super().get_board().get_row(row)
-            if self.__is_player_or_computer(squares[0], squares[1]) and super().is_selecting_possible(squares[2]):
-                self.mark_square(row, 3)
-                return True
-            if self.__is_player_or_computer(squares[0], squares[2]) and super().is_selecting_possible(squares[1]):
-                self.mark_square(row, 2)
-                return True
-            if self.__is_player_or_computer(squares[1], squares[2]) and super().is_selecting_possible(squares[0]):
-                self.mark_square(row, 1)
-                return True
-        return False
-
-    def __select_vertical(self):
-        for column in range(1, 4):
-            squares = super().get_board().get_column(column)
-            if self.__is_player_or_computer(squares[0], squares[1]) and super().is_selecting_possible(squares[2]):
-                self.mark_square(3, column)
-                return True
-            if self.__is_player_or_computer(squares[0], squares[2]) and super().is_selecting_possible(squares[1]):
-                self.mark_square(2, column)
-                return True
-            if self.__is_player_or_computer(squares[1], squares[2]) and super().is_selecting_possible(squares[0]):
-                self.mark_square(1, column)
-                return True
-        return False
-
-    def __select_diagonal(self):
-        squares = super().get_board().get_left_to_right_diagonal()
-        if self.__is_player_or_computer(squares[0], squares[1]) and super().is_selecting_possible(squares[2]):
-            self.mark_square(3, 3)
-            return True
-        if self.__is_player_or_computer(squares[0], squares[2]) and super().is_selecting_possible(squares[1]):
-            self.mark_square(2, 2)
-            return True
-        if self.__is_player_or_computer(squares[1], squares[2]) and super().is_selecting_possible(squares[0]):
-            self.mark_square(1, 1)
-            return True
-
-        squares = super().get_board().get_right_to_left_diagonal()
-        if self.__is_player_or_computer(squares[0], squares[1]) and super().is_selecting_possible(squares[2]):
-            self.mark_square(3, 1)
-            return True
-        if self.__is_player_or_computer(squares[0], squares[2]) and super().is_selecting_possible(squares[1]):
-            self.mark_square(2, 2)
-            return True
-        if self.__is_player_or_computer(squares[1], squares[2]) and super().is_selecting_possible(squares[0]):
-            self.mark_square(1, 3)
-            return True
-        return False
-
     def __select_random(self):
         while True:
             row, column = Random().randint(1, 3), Random().randint(1, 3)
@@ -79,13 +27,27 @@ class Computer(Player):
                 return True
 
     def __select_square_medium(self):
-        is_selected = self.__select_horizontal()
-        if not is_selected:
-            is_selected = self.__select_vertical()
-        if not is_selected:
-            is_selected = self.__select_diagonal()
-        if not is_selected:
-            self.__select_random()
+        for row in range(1, 4):
+            for column in range(1, 4):
+                if super().get_board().get_square(row, column) != SquareStatus.EMPTY:
+                    continue
+                self.mark_square(row, column)
+                if self.__check_game_status() == GameStatus.COMPUTER_WIN:
+                    return
+                super().get_board().set_square(row, column, SquareStatus.EMPTY)
+
+        for row in range(1, 4):
+            for column in range(1, 4):
+                if super().get_board().get_square(row, column) != SquareStatus.EMPTY:
+                    continue
+                self.mark_square(row, column)
+                super().mark_square(row, column)
+                if self.__check_game_status() == GameStatus.PLAYER_WIN:
+                    self.mark_square(row, column)
+                    return
+                super().get_board().set_square(row, column, SquareStatus.EMPTY)
+
+        self.__select_random()
 
     def __select_square_hard(self):
         best = -10
